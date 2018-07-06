@@ -1,0 +1,25 @@
+Gain Table中的表X变量就是设置到sensor Gain寄存器的值
+代码中
+ if(tmp >= 0){
+		fine_gain = (tmp/64)*hm2140_curr_again_level; //Calculate Gain Map's X low four bit
+	}
+	else{			
+		fine_gain = 0;
+	}
+
+	fine_gain &= 0x0f;
+
+计算的就是X变量的低四位的数值，
+fine_gain = (tmp/64)*hm2140_curr_again_level 就是映射低四位的尾数值。把输入的gain值映射到尾数如下形式;
+1-1.937倍gain低四位映射到如下值：
+0 1 2 3 4 5 6 7 8 9 A B C D E F
+
+2-3.875倍gain映射到如下值：
+0 2 4 6 8 A C E
+
+其他倍数增益映射如表中低四位所示
+
+if ((a_gain/1024-1) >= 0) {
+        fine_gain |= ((a_gain/1024-1)<<4);// Calculate Gain Map's X high four bit
+
+计算高四位的数值，并与低四位相与得到最后真正的gain值

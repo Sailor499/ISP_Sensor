@@ -1,7 +1,7 @@
 static unsigned int _cmos_gains_convert(unsigned int a_gain, unsigned int d_gain,
 		unsigned int *a_gain_out ,unsigned int *d_gain_out)
 {
-    //?ï¿½ï¿½??????????ï¿½ï¿½a????????????ï¿½ï¿½??????????ï¿½ï¿½a????sensor?????????
+    //?¡ê??????????¡Áa????????????¡¤??????????¡Áa????sensor?????????
     #define _2XGAIN	2048
 	unsigned int  fine_gain = 0;
 	int tmp = 0;
@@ -23,6 +23,7 @@ static unsigned int _cmos_gains_convert(unsigned int a_gain, unsigned int d_gain
     {
 		tmp = a_gain/2-1024;
 		hm2140_curr_again_level = 2;
+    }
     else if(a_gain<8192)       //4-7.75
     {
 		tmp = a_gain/4-1024;
@@ -35,7 +36,7 @@ static unsigned int _cmos_gains_convert(unsigned int a_gain, unsigned int d_gain
     }
     
     if(tmp >= 0){
-		fine_gain = (tmp/64)*hm2140_curr_again_level; //ï¿½ï¿½ï¿½ï¿½Gain Mapï¿½ï¿½Xï¿½Äµï¿½ï¿½ï¿½Î»Ó³ï¿½ï¿½Öµ
+		fine_gain = (tmp/64)*hm2140_curr_again_level; //Calculate Gain Map's X low four bit
 	}
 	else{			
 		fine_gain = 0;
@@ -44,7 +45,7 @@ static unsigned int _cmos_gains_convert(unsigned int a_gain, unsigned int d_gain
 	fine_gain &= 0x0f;
 
 	if ((a_gain/1024-1) >= 0) {
-        fine_gain |= ((a_gain/1024-1)<<4);//ï¿½ï¿½ï¿½ï¿½Gain Mapï¿½ï¿½Xï¿½Ä¸ï¿½ï¿½ï¿½Î»Öµ
+        fine_gain |= ((a_gain/1024-1)<<4);// Calculate Gain Map's X high four bit
 	}
 
 	//printk(KERN_ERR"again:%d, fine_gain:%x******************************\n",a_gain>>2, fine_gain);
